@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class AnimateTile extends StatefulWidget {
   final Widget? tile;
   final EdgeInsets? padding;
@@ -11,18 +12,17 @@ class AnimateTile extends StatefulWidget {
 class _AnimateTileState extends State<AnimateTile> {
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-       duration: const Duration(seconds: 1),
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 1500),
       tween: Tween(begin: 0.0, end: 1.0),
-      curve: Curves.easeIn,
-
-      builder: (context, value, _) => 
-      Padding(
+      curve: Curves.elasticOut,
+      builder: (context, value, _) => Padding(
         padding: EdgeInsets.only(
-        right: widget.padding!.right * value,
-        left: widget.padding!.left, 
-        top: widget.padding!.top,
-        bottom: widget.padding!.bottom) ,
+          right: widget.padding!.right * value,
+          left: widget.padding!.left,
+          top: widget.padding!.top,
+          bottom: widget.padding!.bottom,
+        ),
         child: widget.tile,
       ),
     );
