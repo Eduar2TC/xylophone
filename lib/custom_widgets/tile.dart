@@ -53,63 +53,53 @@ class _ButtonState extends State<_Button> {
       onController: (controller) {
         animationController = controller;
       },
-      child: SizeTransition(
-        sizeFactor: animationController != null
-            ? CurvedAnimation(
-                parent: animationController!,
-                curve: Curves.elasticOut,
-              )
-            : Tween<double>(begin: 0, end: 1).animate(
-                const AlwaysStoppedAnimation(1),
-              ),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            elevation: 10,
-            backgroundColor: widget.color,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
-            ),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          elevation: 10,
+          backgroundColor: widget.color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
           ),
-          onPressed: () {
-            Sound.playSound(widget.sound);
-            animationController?.reset();
-            animationController?.forward();
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 10.0),
-                    child: RotatedBox(
-                      quarterTurns: 3,
-                      child: Text(
-                        widget.name,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          color: Color(0xFF0F0F0F),
-                          fontWeight: FontWeight.bold,
-                        ),
+        ),
+        onPressed: () {
+          Sound.playSound(widget.sound);
+          animationController?.reset();
+          animationController?.forward();
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10.0),
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      widget.name,
+                      style: const TextStyle(
+                        fontSize: 30,
+                        color: Color(0xFF0F0F0F),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF0F0F0F),
-                    ),
-                    width: 25,
-                    height: 25,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 10.0),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF0F0F0F),
                   ),
-                ],
-              )
-            ],
-          ),
+                  width: 25,
+                  height: 25,
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

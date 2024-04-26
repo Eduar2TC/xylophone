@@ -144,7 +144,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
                     curve: decelerateEasing,
                     tween: Tween<double>(begin: 0.0, end: 1.0),
                     builder: (context, value, _) => Transform.translate(
-                      offset: Offset(-200 + value * width / 2, 0),
+                      offset: Offset(-width / 2 + value * width / 2, 0),
                       child: const Text(
                         'No more tiles',
                         style: TextStyle(
