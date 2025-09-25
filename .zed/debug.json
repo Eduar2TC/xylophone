@@ -1,0 +1,52 @@
+// Project-local debug tasks
+//
+// For more documentation on how to configure debug tasks,
+// see: https://zed.dev/docs/debugger
+[
+  {
+    "label": "Flutter Android",
+    "adapter": "flutter",
+    "name": "Flutter Debug",
+    "type": "flutter",
+    "request": "launch",
+    "program": "lib/main.dart",
+    "flutterMode": "debug",
+    "flutterPlatform": "android",
+    "args": [
+      "--hot"
+    ],
+    "enableLogColors": true,
+    "logFilters": {
+      "showPrint": true,
+      "showDebugPrint": true,
+      "showLog": true,
+      "showError": true,
+      "showWarning": true,
+      "showInfo": false,
+      "minLogLevel": "INFO"
+    }
+  },
+  {
+    "label": "Flutter iOS",
+    "adapter": "flutter",
+    "name": "Flutter Debug",
+    "type": "flutter",
+    "request": "launch",
+    "program": "lib/main.dart",
+    "flutterMode": "debug",
+    "flutterPlatform": "ios",
+    "args": [
+      "--hot"
+    ],
+    "enableLogColors": true,
+    "logFilters": {
+      "showPrint": true,
+      "showDebugPrint": true,
+      "showLog": true,
+      "showError": true,
+      "showWarning": true,
+      "showInfo": false,
+      "minLogLevel": "INFO"
+    }
+  }
+]

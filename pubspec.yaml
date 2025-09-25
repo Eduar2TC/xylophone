@@ -1,22 +1,22 @@
 name: xylophone
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.1 <3.0.0'
+  sdk: ">=2.19.1 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-    
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  audioplayers: ^0.20.1
   flutter_shake_animated: ^0.0.5
+  audioplayers: ^6.5.1
 
 dev_dependencies:
   flutter_test:
@@ -25,17 +25,16 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
-
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/audio/
+    - assets/audio/
 
   fonts:
     - family: MetronicProBold
       fonts:
-        - asset: lib/assets/fonts/MetronicProBold.ttf
+        - asset: assets/fonts/MetronicProBold.ttf
           style: normal
   #   - family: Trajan Pro
   #     fonts:
@@ -43,4 +42,3 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-

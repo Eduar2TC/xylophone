@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 class AnimateTile extends StatefulWidget {
   final Widget? tile;
   final EdgeInsets? padding;
-  const AnimateTile({super.key, this.tile, this.padding});
+  final bool visible;
+  final double height;
+  final double width;
+  const AnimateTile({
+    super.key,
+    this.tile,
+    this.padding,
+    this.visible = true,
+    this.height = 60,
+    this.width = double.infinity,
+  });
 
   @override
   State<AnimateTile> createState() => _AnimateTileState();
@@ -12,19 +22,13 @@ class AnimateTile extends StatefulWidget {
 class _AnimateTileState extends State<AnimateTile> {
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 1500),
-      tween: Tween(begin: 0.0, end: 1.0),
-      curve: Curves.elasticOut,
-      builder: (context, value, _) => Padding(
-        padding: EdgeInsets.only(
-          right: widget.padding!.right * value,
-          left: widget.padding!.left,
-          top: widget.padding!.top,
-          bottom: widget.padding!.bottom,
-        ),
-        child: widget.tile,
-      ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      width: widget.visible ? widget.width : 0,
+      height: widget.visible ? widget.height : 0,
+      padding: widget.padding ?? EdgeInsets.zero,
+      child: widget.visible ? widget.tile : null,
     );
   }
 }
