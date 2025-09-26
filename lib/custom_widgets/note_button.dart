@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:xylophone/helpers/sound.dart';
 
-class Button extends StatefulWidget {
+class NoteButton extends StatefulWidget {
   final Color color;
   final int sound;
   final String name;
 
-  const Button({
+  const NoteButton({
     super.key,
     required this.color,
     required this.sound,
@@ -15,10 +15,10 @@ class Button extends StatefulWidget {
   });
 
   @override
-  State<Button> createState() => _ButtonState();
+  State<NoteButton> createState() => _NoteButtonState();
 }
 
-class _ButtonState extends State<Button> {
+class _NoteButtonState extends State<NoteButton> {
   @override
   Widget build(BuildContext context) {
     AnimationController? animationController;

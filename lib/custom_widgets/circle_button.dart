@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RoundedButton extends StatelessWidget {
-  const RoundedButton({super.key, this.iconData, this.onPress});
+class CircleButton extends StatelessWidget {
+  const CircleButton({super.key, this.iconData, this.onPress});
   final IconData? iconData;
   final Function()? onPress;
   @override

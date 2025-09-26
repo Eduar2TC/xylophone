@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/custom_widgets/rounded_button.dart';
-import 'package:xylophone/custom_widgets/tile.dart';
+import 'package:xylophone/custom_widgets/circle_button.dart';
+import 'package:xylophone/custom_widgets/note_container.dart';
 import 'package:xylophone/helpers/constants.dart';
 
 class XylophoneApp extends StatefulWidget {
@@ -42,7 +42,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
         double paddingRight = width * (basePadding - (basePadding / tilesCount * i) - basePadding / tilesCount) / 100;
         return Expanded(
           flex: 1,
-          child: Tile(
+          child: NoteContainer(
             name: tileData[i]['name'],
             sound: tileData[i]['sound'],
             color: tileData[i]['color'],
@@ -76,7 +76,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(left: 15),
-                                child: RoundedButton(
+                                child: CircleButton(
                                   iconData: Icons.remove,
                                   onPress: removeTile,
                                 ),
@@ -92,7 +92,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 15),
-                                child: RoundedButton(
+                                child: CircleButton(
                                   iconData: Icons.add,
                                   onPress: addTile,
                                 ),

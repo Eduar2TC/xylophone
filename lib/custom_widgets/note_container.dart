@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/custom_widgets/animate_tile.dart';
-import 'package:xylophone/custom_widgets/button.dart';
+import 'package:xylophone/custom_widgets/animate_note.dart';
+import 'package:xylophone/custom_widgets/note_button.dart';
 
-class Tile extends StatelessWidget {
+class NoteContainer extends StatelessWidget {
   final String name;
   final int sound;
   final Color color;
   final EdgeInsets? padding;
-  const Tile({
+  const NoteContainer({
     super.key,
     required this.name,
     required this.sound,
@@ -17,9 +17,9 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimateTile(
+    return AnimateNote(
       padding: padding,
-      tile: Button(color: color, sound: sound, name: name),
+      tile: NoteButton(color: color, sound: sound, name: name),
     );
   }
 }
