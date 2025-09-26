@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/pages/xylophone_page.dart';
+import 'package:xylophone/ui/screens/pages/xylophone_page.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

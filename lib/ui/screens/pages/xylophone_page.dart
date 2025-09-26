@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/custom_widgets/circle_button.dart';
-import 'package:xylophone/custom_widgets/note_container.dart';
-import 'package:xylophone/helpers/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:xylophone/providers/notes_provider.dart';
+import 'package:xylophone/ui/screens/pages/custom_widgets/circle_button.dart';
+import 'package:xylophone/ui/screens/pages/custom_widgets/note_container.dart';
 
 class XylophoneApp extends StatefulWidget {
   const XylophoneApp({Key? key}) : super(key: key);
@@ -11,46 +12,35 @@ class XylophoneApp extends StatefulWidget {
 }
 
 class _XylophoneAppState extends State<XylophoneApp> {
-  int tilesCount = 8;
-
-  void removeTile() {
-    setState(() {
-      if (tilesCount > 0) {
-        tilesCount--;
-      }
-    });
-  }
-
-  void addTile() {
-    setState(() {
-      if (tilesCount < 8) {
-        tilesCount++;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final notesProvider = Provider.of<NotesProvider>(context);
+    final notes = notesProvider.notes;
     final width = MediaQuery.of(context).size.width;
-
     // Dynamic padding
     const double basePadding = 55.0;
-    final tiles = List.generate(
-      tilesCount,
+    final notesList = List.generate(
+      notes.length,
       (i) {
-        // Calculate padding based on the tile index
-        double paddingRight = width * (basePadding - (basePadding / tilesCount * i) - basePadding / tilesCount) / 100;
+        // Calculate padding based on the list note index
+        double paddingRight = width * (basePadding - (basePadding / notes.length * i) - basePadding / notes.length) / 100;
         return Expanded(
           flex: 1,
           child: NoteContainer(
-            name: tileData[i]['name'],
-            sound: tileData[i]['sound'],
-            color: tileData[i]['color'],
+            name: notes[i].name,
+            sound: notes[i].sound,
+            color: notes[i].color,
             padding: EdgeInsets.fromLTRB(0, 0, paddingRight, 10),
           ),
         );
       },
     );
+
+    void removeNote() {
+      if (notes.isNotEmpty) {
+        notesProvider.removeNote(notes.length - 1);
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xff3b3e47),
@@ -78,7 +68,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
                                 padding: const EdgeInsets.only(left: 15),
                                 child: CircleButton(
                                   iconData: Icons.remove,
-                                  onPress: removeTile,
+                                  onPress: removeNote,
                                 ),
                               ),
                               const Text(
@@ -94,7 +84,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
                                 padding: const EdgeInsets.only(right: 15),
                                 child: CircleButton(
                                   iconData: Icons.add,
-                                  onPress: addTile,
+                                  onPress: notesProvider.addNote,
                                 ),
                               ),
                             ],
@@ -107,8 +97,8 @@ class _XylophoneAppState extends State<XylophoneApp> {
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: tilesCount > 0
-                        ? tiles
+                    children: notes.isNotEmpty
+                        ? notesList
                         : [
                             Expanded(
                               child: Center(

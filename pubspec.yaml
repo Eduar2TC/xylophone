@@ -17,6 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_shake_animated: ^0.0.5
   audioplayers: ^6.5.1
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:

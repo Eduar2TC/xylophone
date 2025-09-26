@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/custom_widgets/animate_note.dart';
-import 'package:xylophone/custom_widgets/note_button.dart';
+import 'package:xylophone/ui/screens/pages/custom_widgets/animate_note.dart';
+import 'package:xylophone/ui/screens/pages/custom_widgets/note_button.dart';
 
 class NoteContainer extends StatelessWidget {
   final String name;

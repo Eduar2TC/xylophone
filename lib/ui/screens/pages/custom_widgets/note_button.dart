@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
-import 'package:xylophone/helpers/sound.dart';
+import 'package:xylophone/core/helpers/sound.dart';
 
 class NoteButton extends StatefulWidget {
   final Color color;
@@ -23,6 +23,7 @@ class _NoteButtonState extends State<NoteButton> {
   Widget build(BuildContext context) {
     AnimationController? animationController;
     return ShakeWidget(
+      key: Key(widget.name),
       autoPlay: false,
       enableWebMouseHover: false,
       shakeConstant: ShakeLittleConstant1(),
