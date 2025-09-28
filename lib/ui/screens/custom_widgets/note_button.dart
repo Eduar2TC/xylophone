@@ -19,11 +19,11 @@ class NoteButton extends StatefulWidget {
 }
 
 class _NoteButtonState extends State<NoteButton> {
+  AnimationController? animationController;
   @override
   Widget build(BuildContext context) {
-    AnimationController? animationController;
     return ShakeWidget(
-      key: Key(widget.name),
+      key: ValueKey('${widget.name}_${widget.sound}'), // To ensure unique key for each button
       autoPlay: false,
       enableWebMouseHover: false,
       shakeConstant: ShakeLittleConstant1(),

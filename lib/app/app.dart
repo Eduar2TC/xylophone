@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/ui/screens/pages/xylophone_page.dart';
+import 'package:xylophone/ui/screens/xylophone_app_screen.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {

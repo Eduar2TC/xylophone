@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:xylophone/providers/notes_provider.dart';
-import 'package:xylophone/ui/screens/pages/xylophone_page.dart';
+import 'package:xylophone/ui/screens/xylophone_app_screen.dart';
 
 void main() {
   testWidgets('Xylophone tiles add/remove test', (WidgetTester tester) async {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xylophone/providers/notes_provider.dart';
-import 'package:xylophone/ui/screens/pages/custom_widgets/circle_button.dart';
-import 'package:xylophone/ui/screens/pages/custom_widgets/note_container.dart';
+import 'package:xylophone/ui/screens/custom_widgets/circle_button.dart';
+import 'package:xylophone/ui/screens/custom_widgets/note_container.dart';
 
 class XylophoneApp extends StatefulWidget {
   const XylophoneApp({Key? key}) : super(key: key);

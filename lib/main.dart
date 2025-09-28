@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:xylophone/providers/notes_provider.dart';
-import 'package:xylophone/ui/screens/pages/home.dart';
+import 'package:xylophone/app/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +10,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (_) => NotesProvider(),
-      child: const Home(),
+      child: const App(),
     ),
   );
 }
