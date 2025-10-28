@@ -18,6 +18,13 @@ dependencies:
   flutter_shake_animated: ^0.0.5
   audioplayers: ^6.5.1
   provider: ^6.1.5+1
+  flutter_localization: ^0.3.3
+  #localization support
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  flutter_colorpicker: ^1.1.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +34,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:

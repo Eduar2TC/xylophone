@@ -1,0 +1,26 @@
+{
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "options": "Options",
+  "functionality": "Functionality",
+  "sound": "Sound on touch",
+  "vibration": "Vibrate on touch",
+  "about": "About",
+  "contact": "Contact",
+  "privacy_policy": "Privacy Policy",
+  "terms_of_service": "Terms of Service",
+  "version": "Versión",
+  "language": "Language",
+  "spanish": "Spanish",
+  "english": "English",
+  "notes_colors": "Notes Colors",
+  "choose_color_for_note": "Choose color for note",
+  "ok": "Ok",
+  "cancel": "Cancel",
+  "reset_colors": "Reset colors?",
+  "are_you_sure_you_want_to_reset_the_colors_of_the_notes": "Are you sure you want to reset the colors of the notes?",
+  "animation": "Animation",
+  "other": "Other"
+
+}

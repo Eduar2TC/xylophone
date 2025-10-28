@@ -36,7 +36,7 @@ class _NoteButtonState extends State<NoteButton> {
           elevation: 10,
           backgroundColor: widget.color,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
+            borderRadius: BorderRadius.circular(50), //changed value
           ),
         ),
         onPressed: () {
