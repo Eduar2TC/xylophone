@@ -73,7 +73,7 @@ class AppLocalizationsEs extends AppLocalizations {
       '¿Estás seguro de que deseas restablecer los colores de las notas?';
 
   @override
-  String get animation => 'Animación';
+  String get note_label_animation => 'Animación de letra de la nota';
 
   @override
   String get other => 'Otro';

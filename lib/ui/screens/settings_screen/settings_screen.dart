@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:xylophone/core/l10n/arb_output/generated/app_localizations.dart';
 import 'package:xylophone/providers/locale_provider.dart';
 import 'package:xylophone/providers/notes_provider.dart';
+import 'package:xylophone/providers/theme_provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -13,21 +14,23 @@ class SettingsScreen extends StatelessWidget {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final locale = AppLocalizations.of(context)!;
     final notesProvider = Provider.of<NotesProvider>(context);
+    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xff23242a),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0F0F0F),
+        backgroundColor: theme.appBarTheme.backgroundColor,
         title: Text(
           locale.settings,
-          style: const TextStyle(
-            color: Colors.white,
+          style: theme.textTheme.titleLarge?.copyWith(
             fontFamily: 'MetronicProBold',
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () => Navigator.of(context).pop(),
         ),
         elevation: 0,
@@ -37,32 +40,38 @@ class SettingsScreen extends StatelessWidget {
         children: [
           Text(
             locale.appearance,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.brightness_6, color: Colors.white),
+            leading: Icon(Icons.brightness_6, color: theme.iconTheme.color),
             title: Text(
               locale.theme,
-              style: const TextStyle(color: Colors.white),
+              style: theme.textTheme.bodyLarge,
             ),
-            subtitle: const Text(
-              'Claro/Oscuro/Sistema',
-              style: TextStyle(color: Colors.white70),
+            subtitle: Text(
+              themeProvider.currentTheme.toString().split('.').last,
+              style: theme.textTheme.bodyMedium,
             ),
-            onTap: () {},
+            trailing: DropdownButton<AppTheme>(
+              value: themeProvider.currentTheme,
+              dropdownColor: theme.dialogTheme.backgroundColor,
+              style: theme.textTheme.bodyLarge,
+              items: AppTheme.values.map((themeValue) {
+                return DropdownMenuItem(
+                  value: themeValue,
+                  child: Text(themeValue.toString().split('.').last),
+                );
+              }).toList(),
+              onChanged: (newTheme) {
+                if (newTheme != null) themeProvider.setTheme(newTheme);
+              },
+            ),
           ),
-          // Grupo de colores de las notas
           Text(
             locale.notes_colors,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-            ),
+            style: theme.textTheme.bodyMedium,
           ),
           const SizedBox(height: 8),
           SingleChildScrollView(
@@ -80,13 +89,24 @@ class SettingsScreen extends StatelessWidget {
                           return AlertDialog(
                             title: Text('${locale.choose_color_for_note} ${note.name}'),
                             content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: pickerColor,
-                                onColorChanged: (color) {
-                                  pickerColor = color;
-                                },
-                                enableAlpha: false,
-                                pickerAreaHeightPercent: 0.8,
+                              child: Theme(
+                                data: theme.copyWith(
+                                  textTheme: theme.textTheme.copyWith(
+                                    titleMedium: theme.textTheme.bodyLarge,
+                                  ),
+                                  iconTheme: theme.iconTheme.copyWith(
+                                    color: theme.textTheme.bodyLarge?.color,
+                                  ),
+                                  canvasColor: theme.dialogTheme.backgroundColor,
+                                ),
+                                child: ColorPicker(
+                                  pickerColor: pickerColor,
+                                  onColorChanged: (color) {
+                                    pickerColor = color;
+                                  },
+                                  enableAlpha: false,
+                                  pickerAreaHeightPercent: 0.8,
+                                ),
                               ),
                             ),
                             actions: [
@@ -114,7 +134,7 @@ class SettingsScreen extends StatelessWidget {
                         color: note.color,
                         shape: BoxShape.rectangle,
                         border: Border.all(
-                          color: Colors.white,
+                          color: theme.iconTheme.color ?? Colors.white,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -123,8 +143,7 @@ class SettingsScreen extends StatelessWidget {
                         child: Text(
                           note.name,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -166,14 +185,14 @@ class SettingsScreen extends StatelessWidget {
                         color: Colors.transparent,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white,
+                          color: theme.iconTheme.color ?? Colors.white,
                           width: 2,
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.refresh,
-                          color: Colors.white,
+                          color: theme.iconTheme.color,
                           size: 20,
                         ),
                       ),
@@ -184,12 +203,10 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          const Divider(color: Colors.white24),
+          Divider(color: theme.dividerColor),
           Text(
             locale.functionality,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -198,61 +215,59 @@ class SettingsScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               ListTile(
-                leading: const Icon(Icons.music_note, color: Colors.white),
+                leading: Icon(Icons.music_note, color: theme.iconTheme.color),
                 title: Text(
                   locale.sound,
-                  style: const TextStyle(color: Colors.white),
+                  style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {},
-                  activeThumbColor: Colors.blue,
+                  activeThumbColor: theme.colorScheme.primary,
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.vibration, color: Colors.white),
+                leading: Icon(Icons.vibration, color: theme.iconTheme.color),
                 title: Text(
                   locale.vibration,
-                  style: const TextStyle(color: Colors.white),
+                  style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(
                   value: false,
                   onChanged: (value) {},
-                  activeThumbColor: Colors.blue,
+                  activeThumbColor: theme.colorScheme.primary,
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.animation, color: Colors.white),
+                leading: Icon(Icons.animation, color: theme.iconTheme.color),
                 title: Text(
-                  locale.animation,
-                  style: const TextStyle(color: Colors.white),
+                  locale.note_label_animation,
+                  style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {},
-                  activeThumbColor: Colors.blue,
+                  activeThumbColor: theme.colorScheme.primary,
                 ),
               ),
             ],
           ),
-          const Divider(color: Colors.white24),
+          Divider(color: theme.dividerColor),
           Text(
             locale.other,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.language, color: Colors.white),
+            leading: Icon(Icons.language, color: theme.iconTheme.color),
             title: Text(
               locale.language,
-              style: const TextStyle(color: Colors.white),
+              style: theme.textTheme.bodyLarge,
             ),
             subtitle: Text(
               localeProvider.locale.languageCode == 'en' ? locale.english : locale.spanish,
-              style: const TextStyle(color: Colors.white70),
+              style: theme.textTheme.bodyMedium,
             ),
             onTap: () {
               showDialog(
@@ -275,11 +290,29 @@ class SettingsScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               RadioListTile<Locale>(
-                                title: Text(locale.english),
+                                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                                  if (states.contains(WidgetState.selected)) {
+                                    return Theme.of(context).colorScheme.primary;
+                                  }
+                                  return Theme.of(context).unselectedWidgetColor;
+                                }),
+                                title: Text(
+                                  locale.english,
+                                  style: theme.textTheme.bodyLarge,
+                                ),
                                 value: const Locale('en'),
                               ),
                               RadioListTile<Locale>(
-                                title: Text(locale.spanish),
+                                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                                  if (states.contains(WidgetState.selected)) {
+                                    return Theme.of(context).colorScheme.primary;
+                                  }
+                                  return Theme.of(context).unselectedWidgetColor;
+                                }),
+                                title: Text(
+                                  locale.spanish,
+                                  style: theme.textTheme.bodyLarge,
+                                ),
                                 value: const Locale('es'),
                               ),
                             ],
@@ -293,19 +326,19 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info, color: Colors.white),
+            leading: Icon(Icons.info, color: theme.iconTheme.color),
             title: Text(
               locale.about,
-              style: const TextStyle(color: Colors.white),
+              style: theme.textTheme.bodyLarge,
             ),
             onTap: () {
               showAboutDialog(
                 context: context,
                 applicationName: 'Xylophone',
                 applicationVersion: '1.0.0',
-                applicationIcon: const Icon(Icons.music_note, size: 50),
+                applicationIcon: const Icon(Icons.music_note, size: 40),
                 children: [
-                  const Text("About Xylophone"),
+                  Text("About Xylophone", style: theme.textTheme.bodyLarge),
                 ],
               );
             },

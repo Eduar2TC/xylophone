@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:xylophone/core/constants/app_themes.dart';
 
-enum AppTheme { light, dark, system, ocean }
+enum AppTheme { defaultTheme, light, dark, system, ocean }
 
 class ThemeProvider extends ChangeNotifier {
-  AppTheme _currentTheme = AppTheme.system;
+  AppTheme _currentTheme = AppTheme.defaultTheme;
 
   AppTheme get currentTheme => _currentTheme;
 
@@ -21,6 +21,8 @@ class ThemeProvider extends ChangeNotifier {
         return ThemeMode.dark;
       case AppTheme.system:
         return ThemeMode.system;
+      case AppTheme.defaultTheme:
+        return ThemeMode.dark;
       default:
         return ThemeMode.system;
     }
@@ -28,6 +30,8 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeData get themeData {
     switch (_currentTheme) {
+      case AppTheme.defaultTheme:
+        return AppThemes.defaultTheme;
       case AppTheme.light:
         return ThemeData.light();
       case AppTheme.dark:
@@ -36,7 +40,7 @@ class ThemeProvider extends ChangeNotifier {
         return AppThemes.ocean;
       case AppTheme.system:
       default:
-        return ThemeData.fallback();
+        return AppThemes.defaultTheme;
     }
   }
 }

@@ -20,7 +20,7 @@
   "cancel": "Cancel",
   "reset_colors": "Reset colors?",
   "are_you_sure_you_want_to_reset_the_colors_of_the_notes": "Are you sure you want to reset the colors of the notes?",
-  "animation": "Animation",
+  "note_label_animation": "Overlay label animation",
   "other": "Other"
 
 }

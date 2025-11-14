@@ -224,11 +224,11 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to reset the colors of the notes?'**
   String get are_you_sure_you_want_to_reset_the_colors_of_the_notes;
 
-  /// No description provided for @animation.
+  /// No description provided for @note_label_animation.
   ///
   /// In en, this message translates to:
-  /// **'Animation'**
-  String get animation;
+  /// **'Overlay label animation'**
+  String get note_label_animation;
 
   /// No description provided for @other.
   ///

@@ -18,12 +18,11 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> {
     final notesProvider = Provider.of<NotesProvider>(context);
     final notes = notesProvider.notes;
     final width = MediaQuery.of(context).size.width;
-    // Dynamic padding
     const double basePadding = 55.0;
+
     final notesList = List.generate(
       notes.length,
       (i) {
-        // Calculate padding based on the list note index
         double paddingRight = width * (basePadding - (basePadding / notes.length * i) - basePadding / notes.length) / 100;
         return Expanded(
           flex: 1,
@@ -44,12 +43,15 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xff3b3e47),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Container(
-            color: const Color(0xFF0F0F0F),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Stack(
               children: [
                 Row(
@@ -60,7 +62,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> {
                         Expanded(
                           child: Container(
                             width: 60,
-                            color: const Color(0xFF0F0F0F),
+                            color: Theme.of(context).appBarTheme.backgroundColor,
                             child: RotatedBox(
                               quarterTurns: 3,
                               child: Row(
