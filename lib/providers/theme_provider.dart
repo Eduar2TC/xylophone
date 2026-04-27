@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:xylophone/core/constants/app_themes.dart';
+import 'package:xylophone/core/helpers/prefs_helper.dart';
 
 enum AppTheme { defaultTheme, light, dark, system, ocean }
 
 class ThemeProvider extends ChangeNotifier {
   AppTheme _currentTheme = AppTheme.defaultTheme;
 
+  ThemeProvider() {
+    loadTheme();
+  }
+
+  Future<void> loadTheme() async {
+    final theme = (await PrefsHelper.prefs).getString('app_theme');
+    if (theme != null) {
+      _currentTheme = AppTheme.values.firstWhere(
+        (e) => e.toString().split('.').last == theme,
+        orElse: () => AppTheme.defaultTheme,
+      );
+    }
+    notifyListeners();
+  }
+
   AppTheme get currentTheme => _currentTheme;
 
-  void setTheme(AppTheme theme) {
+  Future<void> setTheme(AppTheme theme) async {
     _currentTheme = theme;
+    (await PrefsHelper.prefs).setString('app_theme', theme.toString().split('.').last);
     notifyListeners();
   }
 

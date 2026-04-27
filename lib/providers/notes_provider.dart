@@ -18,7 +18,6 @@ class NotesProvider extends ChangeNotifier {
           name: notes[i].name,
           sound: notes[i].sound,
           color: Color(colorValue),
-          visible: notes[i].visible,
         );
       }
     }
@@ -27,9 +26,7 @@ class NotesProvider extends ChangeNotifier {
 
   Future<void> removeNote(int index) async {
     if (index < 0 || index >= notes.length) return;
-    notes[index].visible = false;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 150));
     notes.removeAt(index);
     notifyListeners();
   }
@@ -41,11 +38,7 @@ class NotesProvider extends ChangeNotifier {
         name: nextNote.name,
         sound: nextNote.sound,
         color: nextNote.color,
-        visible: false,
       ));
-      notifyListeners();
-      await Future.delayed(Duration.zero);
-      notes.last.visible = true;
       notifyListeners();
     }
   }
@@ -61,12 +54,7 @@ class NotesProvider extends ChangeNotifier {
   Future<void> updateNoteColor(int index, Color color) async {
     if (index < 0 || index >= notes.length) return;
     if (index >= 0 && index < notes.length) {
-      notes[index] = NoteData(
-        name: notes[index].name,
-        sound: notes[index].sound,
-        color: color,
-        visible: notes[index].visible,
-      );
+      notes[index] = NoteData(name: notes[index].name, sound: notes[index].sound, color: color);
     }
     (await PrefsHelper.prefs).setInt('note_color_$index', color.toARGB32());
     notifyListeners();
