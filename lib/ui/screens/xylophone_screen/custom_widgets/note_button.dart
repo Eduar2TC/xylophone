@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:xylophone/core/helpers/sound.dart';
-import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/animated_note_label.dart'; // <--- nuevo import
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/widget_effects/animated_note_label.dart';
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/widget_effects/sparks.dart';
 
 class NoteButton extends StatefulWidget {
   final Color color;
@@ -22,20 +23,37 @@ class NoteButton extends StatefulWidget {
 class _NoteButtonState extends State<NoteButton> {
   AnimationController? animationController;
 
-  void _showFloatingLabel(TapDownDetails details) {
+  ///return global offset position
+  Offset _getGlobalOffset(TapDownDetails details) {
     final RenderBox box = context.findRenderObject() as RenderBox;
-    final Offset globalPosition = box.localToGlobal(details.localPosition);
+    return box.localToGlobal(details.localPosition);
+  }
 
+  void _showFloatingLabel(TapDownDetails details) {
+    final Offset globalOffset = _getGlobalOffset(details);
     final overlay = Overlay.of(context);
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (context) => AnimatedNoteLabel(
-        startPosition: globalPosition,
+        startPosition: globalOffset,
         label: widget.name,
         onComplete: () => overlayEntry.remove(),
       ),
     );
     overlay.insert(overlayEntry);
+  }
+
+  // Show sparks at the tap position (convert local to global coords)
+  void _showSparks(TapDownDetails details) {
+    final Offset globalOffset = _getGlobalOffset(details);
+    showSparksOverlay(
+      context,
+      globalOffset,
+      color: widget.color,
+      count: 12,
+      duration: const Duration(milliseconds: 700),
+      maxDistance: 90.0,
+    );
   }
 
   @override
@@ -55,6 +73,7 @@ class _NoteButtonState extends State<NoteButton> {
           animationController?.reset();
           animationController?.forward();
           _showFloatingLabel(details);
+          _showSparks(details);
         },
         child: TextButton(
           style: TextButton.styleFrom(
@@ -64,7 +83,7 @@ class _NoteButtonState extends State<NoteButton> {
               borderRadius: BorderRadius.circular(50),
             ),
           ),
-          onPressed: null, // Deshabilitado, usamos GestureDetector
+          onPressed: null, // handled by GestureDetector
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -205,7 +205,6 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTick
                     ),
                   ],
                 ),
-
                 // Settings button
                 Positioned(
                   top: 10,
