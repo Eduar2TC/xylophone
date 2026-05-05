@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/animate_note.dart';
 import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_button.dart';
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/padding_wrapper.dart';
 
-class NoteContainer extends StatelessWidget {
+class NoteButtonWrapper extends StatelessWidget {
   final String name;
   final int sound;
   final Color color;
   final EdgeInsets? padding;
-  const NoteContainer({
+  const NoteButtonWrapper({
     super.key,
     required this.name,
     required this.sound,
@@ -17,7 +17,7 @@ class NoteContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimateNote(
+    return PaddingWrapper(
       padding: padding,
       tile: NoteButton(color: color, sound: sound, name: name),
     );

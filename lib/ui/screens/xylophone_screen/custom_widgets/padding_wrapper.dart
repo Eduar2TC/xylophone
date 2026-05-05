@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AnimateNote extends StatefulWidget {
+class PaddingWrapper extends StatefulWidget {
   final Widget? tile;
   final EdgeInsets? padding;
   final double height;
   final double width;
-  const AnimateNote({
+  const PaddingWrapper({
     super.key,
     this.tile,
     this.padding,
@@ -14,10 +14,10 @@ class AnimateNote extends StatefulWidget {
   });
 
   @override
-  State<AnimateNote> createState() => _AnimateNoteState();
+  State<PaddingWrapper> createState() => _PaddingWrapperState();
 }
 
-class _AnimateNoteState extends State<AnimateNote> {
+class _PaddingWrapperState extends State<PaddingWrapper> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(

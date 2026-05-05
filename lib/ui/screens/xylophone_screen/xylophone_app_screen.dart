@@ -1,19 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xylophone/core/models/note_data.dart';
 import 'package:xylophone/providers/notes_provider.dart';
 import 'package:xylophone/ui/screens/settings_screen/settings_screen.dart';
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/animated_note_item.dart';
 import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/circle_button.dart';
-import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_container.dart';
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_button_wrapper.dart';
+import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_entry.dart';
 
-/// Xylophone main screen with a master AnimationController and per-item
-/// Interval-based animations (staggered entrance) without per-item timers.
-///
-/// Behavior:
-/// - On the first appearance the master controller runs once and each item
-///   animates in its slice of the controller timeline (staggered entrance).
-/// - Subsequent adds/removes during runtime animate immediately (no delay
-///   accumulation). New items won't replay the initial stagger unless the
-///   controller is restarted intentionally.
 class XylophoneAppScreen extends StatefulWidget {
   const XylophoneAppScreen({Key? key}) : super(key: key);
 
@@ -21,94 +17,149 @@ class XylophoneAppScreen extends StatefulWidget {
   State<XylophoneAppScreen> createState() => _XylophoneAppScreenState();
 }
 
-class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _masterController;
+class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProviderStateMixin {
+  // Una sola lista reemplaza: _visibleNotes, _initialIds, _enterControllers, _exitControllers
+  final List<NoteEntry> _entries = [];
+
+  // Controller único para el stagger inicial
+  late final AnimationController _masterCtrl;
+
+  late NotesProvider _notesProvider;
+  bool _initialized = false;
+
+  // ─── Lifecycle ───────────────────────────────────────────────────────────────
 
   @override
   void initState() {
     super.initState();
-    // Total duration controls the overall speed of the stagger.
-    _masterController = AnimationController(
+    _masterCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
+  }
 
-    // Start the master animation once on screen creation to produce the initial
-    // staggered entrance.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _masterController.forward();
-        }
-      });
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      _setupInitialEntries();
+      _initialized = true;
+    }
   }
 
   @override
   void dispose() {
-    _masterController.dispose();
+    _notesProvider.removeListener(_onNotesChanged);
+    _masterCtrl.dispose();
+    for (final e in _entries) {
+      e.dispose();
+    }
     super.dispose();
   }
+
+  // ─── Setup inicial ───────────────────────────────────────────────────────────
+
+  void _setupInitialEntries() {
+    _notesProvider = Provider.of<NotesProvider>(context, listen: false);
+    final notes = List<NoteData>.from(_notesProvider.notes);
+
+    for (var i = 0; i < notes.length; i++) {
+      _entries.add(NoteEntry(
+        note: notes[i],
+        enterCtrl: _masterCtrl,
+        isInitial: true,
+        staggerIndex: i,
+        staggerTotal: notes.length,
+      ));
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _masterCtrl.forward();
+    });
+
+    _notesProvider.addListener(_onNotesChanged);
+  }
+
+  // ─── Sincronización con el provider ─────────────────────────────────────────
+
+  void _onNotesChanged() {
+    final newNotes = List<NoteData>.from(_notesProvider.notes);
+
+    // Entradas: notas que el provider tiene pero no están en _entries
+    for (var i = 0; i < newNotes.length; i++) {
+      final note = newNotes[i];
+      final alreadyVisible = _entries.any((e) => e.note.sound == note.sound);
+      if (!alreadyVisible) {
+        final ctrl = AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 350),
+        );
+        final entry = NoteEntry(note: note, enterCtrl: ctrl);
+        final insertIndex = i.clamp(0, _entries.length);
+
+        setState(() => _entries.insert(insertIndex, entry));
+
+        Future<void>.delayed(const Duration(milliseconds: 20), () {
+          if (mounted) ctrl.forward();
+        });
+      }
+    }
+
+    // Salidas: entries que ya no están en el provider
+    for (final entry in List<NoteEntry>.from(_entries)) {
+      final stillExists = newNotes.any((n) => n.sound == entry.note.sound);
+      if (!stillExists && entry.exitCtrl == null) {
+        final exitCtrl = AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 300),
+        );
+        setState(() => entry.exitCtrl = exitCtrl);
+
+        exitCtrl.forward().whenComplete(() {
+          setState(() => _entries.remove(entry));
+          entry.dispose();
+        });
+      }
+    }
+  }
+
+  void _removeNote() {
+    if (_notesProvider.notes.isNotEmpty) {
+      _notesProvider.removeNote(_notesProvider.notes.length - 1);
+    }
+  }
+
+  // ─── Build ───────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
-    final notes = notesProvider.notes;
     final width = MediaQuery.of(context).size.width;
     const double basePadding = 55.0;
 
-    // Guard against zero-length to avoid division by zero.
-    final int total = notes.isNotEmpty ? notes.length : 1;
-    final double band = 1.0 / total;
+    final notesList = List<Widget>.generate(_entries.length, (i) {
+      final entry = _entries[i];
+      final visibleCount = _entries.isNotEmpty ? _entries.length : 1;
+      final rawPadding = width * (basePadding - (basePadding / visibleCount * i) - basePadding / visibleCount) / 100;
+      final paddingRight = math.max(0.0, rawPadding);
 
-    final notesList = List.generate(
-      notes.length,
-      (i) {
-        // Padding calculation to visually offset bars.
-        final double paddingRight = width * (basePadding - (basePadding / notes.length * i) - basePadding / notes.length) / 100;
-
-        // Each item gets a sub-interval of the master's [0,1] timeline.
-        final double start = (i * band).clamp(0.0, 1.0);
-        // Slightly shorten each band's end for smoother overlap; clamp to 1.0.
-        final double end = ((i + 1) * band).clamp(0.0, 1.0);
-
-        final animation = CurvedAnimation(
-          parent: _masterController,
-          curve: Interval(start, end, curve: Curves.easeOut),
-        );
-
-        final slideAnim = Tween<Offset>(begin: const Offset(0.08, 0), end: Offset.zero).animate(animation);
-        final scaleAnim = Tween<double>(begin: 0.96, end: 1.0).animate(
-          CurvedAnimation(parent: animation, curve: Curves.elasticOut),
-        );
-
-        return Expanded(
-          flex: 1,
-          child: FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: slideAnim,
-              child: ScaleTransition(
-                scale: scaleAnim,
-                child: NoteContainer(
-                  key: ValueKey('note_${notes[i].sound}_$i'),
-                  name: notes[i].name,
-                  sound: notes[i].sound,
-                  color: notes[i].color,
-                  padding: EdgeInsets.fromLTRB(0, 0, paddingRight, 10),
-                ),
-              ),
-            ),
+      return Expanded(
+        flex: 1,
+        child: AnimatedNoteItem(
+          key: ValueKey(entry.note.sound),
+          enter: entry.enterAnimation(_masterCtrl),
+          exit: entry.exitAnim,
+          isInitial: entry.isInitial,
+          child: NoteButtonWrapper(
+            key: ValueKey('note_${entry.note.sound}_$i'),
+            name: entry.note.name,
+            sound: entry.note.sound,
+            color: entry.note.color,
+            padding: EdgeInsets.fromLTRB(0, 0, paddingRight, 10),
           ),
-        );
-      },
-    );
-
-    void removeNote() {
-      if (notes.isNotEmpty) {
-        notesProvider.removeNote(notes.length - 1);
-      }
-    }
+        ),
+      );
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -124,7 +175,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTick
               children: [
                 Row(
                   children: [
-                    // Left control rail
+                    // ── Riel izquierdo ───────────────────────────────────────
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -142,7 +193,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTick
                                     padding: const EdgeInsets.only(left: 15),
                                     child: CircleButton(
                                       iconData: Icons.remove,
-                                      onPress: removeNote,
+                                      onPress: _removeNote,
                                     ),
                                   ),
                                   const Text(
@@ -165,15 +216,15 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTick
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
 
-                    // Right area with staggered notes
+                    // ── Área de notas ────────────────────────────────────────
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: notes.isNotEmpty
+                        children: _entries.isNotEmpty
                             ? notesList
                             : [
                                 Expanded(
@@ -205,7 +256,8 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with SingleTick
                     ),
                   ],
                 ),
-                // Settings button
+
+                // ── Botón settings ───────────────────────────────────────────
                 Positioned(
                   top: 10,
                   right: 10,
