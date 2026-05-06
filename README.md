@@ -31,7 +31,7 @@ A cross-platform Flutter application that simulates a xylophone instrument with 
 
 ## Demo
 
-[![Ver demo](https://img.youtube.com/vi/1Le0zvWX7MQ/0.jpg)](https://youtu.be/1Le0zvWX7MQ)
+[![Ver demo](https://img.youtube.com/vi/Kz70SyRRlaQ/0.jpg)](https://youtu.be/Kz70SyRRlaQ)
 
 
 ---
