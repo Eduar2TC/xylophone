@@ -31,8 +31,89 @@ A cross-platform Flutter application that simulates a xylophone instrument with 
 
 ## Demo
 
-
 https://github.com/user-attachments/assets/0a9b4094-917f-4889-98a0-62864ce17520
 
+## Project Structure
 
+```
+lib/
+├── app/                          # App entry and configuration
+├── core/
+│   ├── constants/               # App constants and themes
+│   ├── helpers/                 # Utilities (sound, preferences, etc.)
+│   ├── l10n/                    # Localization (i18n)
+│   └── models/                  # Data models (NoteData)
+├── providers/                    # State management (Provider pattern)
+│   ├── notes_provider.dart
+│   ├── theme_provider.dart
+│   ├── locale_provider.dart
+│   └── animation_settings_provider.dart
+└── ui/
+    └── screens/                 # UI screens and custom widgets
+        ├── xylophone_screen/
+        └── settings_screen/
+```
 
+## Key Features Explained
+
+### 🎵 Dynamic Note Management
+- Add or remove notes dynamically
+- Colors are persisted across sessions
+- **Bug Fixed:** Colors are now correctly restored when re-adding deleted notes
+
+### 🎨 Customization
+- Change note colors via color picker
+- Toggle animations (labels, particles, vibration)
+- Switch between day/night themes
+- Multi-language support (English, Spanish)
+
+### ⚡ Performance
+- Smooth animations using Flutter's animation framework
+- Efficient sound playback with overlapping note support
+- Optimized rendering with Provider state management
+
+## Technologies Used
+
+- **Flutter** - Cross-platform UI framework
+- **Provider** - State management
+- **AudioPlayers** - Sound playback
+- **SharedPreferences** - Local persistence
+- **flutter_colorpicker** - Color selection UI
+- **flutter_shake_animated** - Shake animations
+- **Flutter Localization** - i18n support
+
+## Installation & Setup
+
+### Prerequisites
+- Flutter SDK (2.19.1 or higher)
+- Dart SDK
+
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd xylophone
+   ```
+
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+## Recent Fixes
+
+- ✅ **Color Persistence on Re-add:** Fixed issue where note colors were lost when deleting and re-adding notes. Colors are now properly restored from local storage.
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
+
+## License
+
+This project is open source and available under the MIT License.
