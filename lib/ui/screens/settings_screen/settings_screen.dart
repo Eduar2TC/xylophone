@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:xylophone/core/l10n/arb_output/generated/app_localizations.dart';
+import 'package:xylophone/providers/animation_settings_provider.dart';
 import 'package:xylophone/providers/locale_provider.dart';
 import 'package:xylophone/providers/notes_provider.dart';
 import 'package:xylophone/providers/theme_provider.dart';
@@ -11,11 +12,11 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localeProvider = Provider.of<LocaleProvider>(context);
-    final locale = AppLocalizations.of(context)!;
-    final notesProvider = Provider.of<NotesProvider>(context);
+    final LocaleProvider localeProvider = Provider.of<LocaleProvider>(context);
+    final AppLocalizations locale = AppLocalizations.of(context)!;
+    final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
     final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-
+    final AnimationSettingsProvider animationSettingsProvider = Provider.of<AnimationSettingsProvider>(context);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -101,6 +102,7 @@ class SettingsScreen extends StatelessWidget {
                                 ),
                                 child: ColorPicker(
                                   pickerColor: pickerColor,
+                                  pickerAreaBorderRadius: BorderRadius.circular(12),
                                   onColorChanged: (color) {
                                     pickerColor = color;
                                   },
@@ -238,20 +240,63 @@ class SettingsScreen extends StatelessWidget {
                   activeThumbColor: theme.colorScheme.primary,
                 ),
               ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Divider(color: theme.dividerColor),
+          Text(
+            "Animations",
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ListView(
+            shrinkWrap: true, 
+            physics: const NeverScrollableScrollPhysics(), 
+            children: [
               ListTile(
-                leading: Icon(Icons.animation, color: theme.iconTheme.color),
+                leading: Icon(Icons.text_fields, color: theme.iconTheme.color),
                 title: Text(
                   locale.note_label_animation,
                   style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(
-                  value: true,
-                  onChanged: (value) {},
+                  value: animationSettingsProvider.labelAnimationEnabled,
+                  onChanged: (value) {
+                    animationSettingsProvider.setLabelAnimationEnabled(value);
+                  },
                   activeThumbColor: theme.colorScheme.primary,
                 ),
               ),
-            ],
-          ),
+              ListTile(
+                leading: Icon(Icons.animation, color: theme.iconTheme.color),
+                title: Text(
+                  "Particles",
+                  style: theme.textTheme.bodyLarge,
+                ),
+                trailing: Switch(
+                  value: animationSettingsProvider.particlesEnabled,
+                  onChanged: (value) {
+                    animationSettingsProvider.setParticlesEnabled(value);
+                  },
+                  activeThumbColor: theme.colorScheme.primary,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.vibration_outlined, color: theme.iconTheme.color),
+                title: Text(
+                  "Vibration animation",
+                  style: theme.textTheme.bodyLarge,
+                ),
+                trailing: Switch(
+                  value: animationSettingsProvider.vibrationAnimationEnabled,
+                  onChanged: (value) {
+                    animationSettingsProvider.setVibrationAnimationEnabled(value);
+                  },
+                  activeThumbColor: theme.colorScheme.primary,
+                ),
+              ),
+          ]),
           Divider(color: theme.dividerColor),
           Text(
             locale.other,

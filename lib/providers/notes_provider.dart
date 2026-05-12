@@ -34,10 +34,18 @@ class NotesProvider extends ChangeNotifier {
   Future<void> addNote() async {
     if (notes.length < noteList.length) {
       final nextNote = noteList[notes.length];
+      final noteIndex = notes.length;
+      
+      Color noteColor = nextNote.color;
+      final colorValue = (await PrefsHelper.prefs).getInt('note_color_$noteIndex');
+      if (colorValue != null) {
+        noteColor = Color(colorValue);
+      }
+      
       notes.add(NoteData(
         name: nextNote.name,
         sound: nextNote.sound,
-        color: nextNote.color,
+        color: noteColor,
       ));
       notifyListeners();
     }

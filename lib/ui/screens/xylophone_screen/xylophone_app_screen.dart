@@ -9,13 +9,15 @@ import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/animated_no
 import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/circle_button.dart';
 import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_button_wrapper.dart';
 import 'package:xylophone/ui/screens/xylophone_screen/custom_widgets/note_entry.dart';
-
+//TODO:Refactorizar del como se toma la propiedad del color. Antes funcionaba correctamente.
+// Antes seguardaba y tomaba correctamaente de shared preferences, al cambiar por Entries, 
+//se pierde la referencia al color guardado y se asigna el color por defecto del provider, lo que hace que no se vea el cambio de color en las notas. Se debe revisar como se asigna el color a las notas y asegurarse de que se tome correctamente de shared preferences o del provider, para que el cambio de color funcione correctamente.
 class XylophoneAppScreen extends StatefulWidget {
   const XylophoneAppScreen({Key? key}) : super(key: key);
 
   @override
   State<XylophoneAppScreen> createState() => _XylophoneAppScreenState();
-}
+} 
 
 class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProviderStateMixin {
   // Una sola lista reemplaza: _visibleNotes, _initialIds, _enterControllers, _exitControllers
@@ -26,6 +28,11 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProv
 
   late NotesProvider _notesProvider;
   bool _initialized = false;
+
+  /// Returns a map of sound -> NoteData for O(1) color lookups
+  Map<int, NoteData> get _notesBySound => {
+    for (final note in _notesProvider.notes) note.sound: note
+  };
 
   // ─── Lifecycle ───────────────────────────────────────────────────────────────
 
@@ -154,7 +161,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProv
             key: ValueKey('note_${entry.note.sound}_$i'),
             name: entry.note.name,
             sound: entry.note.sound,
-            color: entry.note.color,
+            color: (_notesBySound[entry.note.sound] ?? entry.note).color,
             padding: EdgeInsets.fromLTRB(0, 0, paddingRight, 10),
           ),
         ),
