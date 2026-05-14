@@ -77,4 +77,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get other => 'Otro';
+
+  @override
+  String get particles => 'Particulas';
+
+  @override
+  String get vibration_animation => 'Animación de Vibración';
 }

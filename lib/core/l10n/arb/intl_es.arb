@@ -21,5 +21,7 @@
   "reset_colors": "¿Restablecer colores?",
   "are_you_sure_you_want_to_reset_the_colors_of_the_notes": "¿Estás seguro de que deseas restablecer los colores de las notas?",
   "note_label_animation": "Animación de letra de la nota",
-  "other": "Otro"
+  "other": "Otro",
+  "particles": "Particulas",
+  "vibration_animation": "Animación de Vibración"
 }

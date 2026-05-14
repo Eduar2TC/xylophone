@@ -235,6 +235,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get other;
+
+  /// No description provided for @particles.
+  ///
+  /// In en, this message translates to:
+  /// **'Particles'**
+  String get particles;
+
+  /// No description provided for @vibration_animation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration animation'**
+  String get vibration_animation;
 }
 
 class _AppLocalizationsDelegate

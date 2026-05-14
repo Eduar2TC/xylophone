@@ -207,7 +207,6 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProv
                                     'XIPHONE',
                                     style: TextStyle(
                                       fontFamily: 'MetronicProBold',
-                                      color: Colors.white,
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -258,7 +257,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProv
                                     ),
                                   ),
                                 ),
-                              ],
+                            ],
                       ),
                     ),
                   ],
@@ -270,7 +269,7 @@ class _XylophoneAppScreenState extends State<XylophoneAppScreen> with TickerProv
                   right: 10,
                   child: IconButton(
                     highlightColor: Colors.lightBlueAccent.withAlpha(50),
-                    icon: const Icon(Icons.settings, color: Colors.white, size: 52),
+                    icon: const Icon(Icons.settings, size: 52),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const SettingsScreen()),

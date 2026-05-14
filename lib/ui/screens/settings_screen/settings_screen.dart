@@ -271,7 +271,7 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.animation, color: theme.iconTheme.color),
                 title: Text(
-                  "Particles",
+                  locale.particles,
                   style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(
@@ -285,7 +285,7 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.vibration_outlined, color: theme.iconTheme.color),
                 title: Text(
-                  "Vibration animation",
+                  locale.vibration_animation,
                   style: theme.textTheme.bodyLarge,
                 ),
                 trailing: Switch(

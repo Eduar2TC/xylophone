@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppThemes {
-  static final ThemeData defaultTheme = ThemeData(
+  static final ThemeData charcoal = ThemeData(
     brightness: Brightness.dark,
     primaryColor: const Color(0xFF23242a),
     scaffoldBackgroundColor: const Color(0xFF23242a),

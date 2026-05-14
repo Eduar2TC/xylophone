@@ -4,7 +4,7 @@ import 'package:xylophone/core/helpers/prefs_helper.dart';
 import 'package:xylophone/core/models/note_data.dart';
 
 class NotesProvider extends ChangeNotifier {
-  List<NoteData> notes = List<NoteData>.from(noteList); //TODO: Make persistent from SharedPreferences
+  List<NoteData> notes = List<NoteData>.from(noteList);
 
   NotesProvider() {
     lodadColors();
